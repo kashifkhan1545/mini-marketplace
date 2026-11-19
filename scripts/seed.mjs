@@ -6,7 +6,8 @@ const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
 if (!url || !key) throw new Error('Set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in apps/web/.env.local');
 const db = createClient(url, key, { auth: { persistSession: false } });
-const PASSWORD = '<redacted>';
+const PASSWORD = process.env.DEMO_PASSWORD;
+if (!PASSWORD) throw new Error('Set DEMO_PASSWORD in apps/web/.env.local (password for the demo accounts)');
 
 async function user(email, role, full_name) {
   const { data: list } = await db.auth.admin.listUsers({ perPage: 1000 });
@@ -78,4 +79,4 @@ for (const [gi, g] of groups.entries()) {
   );
   if (e2) throw e2;
 }
-console.log('Seeded. Logins: buyer@demo.test / seller@demo.test / admin@demo.test  password:', PASSWORD);
+console.log('Seeded demo accounts: buyer@demo.test / seller@demo.test / admin@demo.test');

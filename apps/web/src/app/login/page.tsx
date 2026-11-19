@@ -37,10 +37,6 @@ export default function Login() {
       {err && <p className="error">{err}</p>}
       <p><button className="btn" style={{ width: '100%' }} disabled={busy}>{busy ? 'Logging in…' : 'Log in'}</button></p>
       <p className="muted">No account? <Link href="/signup" style={{ textDecoration: 'underline' }}>Sign up</Link></p>
-      <div className="card muted">
-        <b>Demo accounts</b><br />
-        buyer@demo.test / seller@demo.test / admin@demo.test — password <code><redacted></code>
-      </div>
     </form>
   );
 }
