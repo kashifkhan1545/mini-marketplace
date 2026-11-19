@@ -3,6 +3,7 @@ import { ActivityIndicator, FlatList, Image, Pressable, Text, TextInput, View } 
 import { Product, colourGroup, discountPercent, money } from '@mm/shared';
 import { api, img } from '../api';
 import { C, Chip, s, shadow } from '../theme';
+import { imgSrc } from '../images';
 
 const CATS = [{ slug: '', label: 'All' }, { slug: 'furniture', label: 'Furniture' }, { slug: 'divan-beds', label: 'Divan Beds' }];
 
@@ -85,7 +86,7 @@ export default function Shop({ navigation }: any) {
         return (
           <Pressable style={[s.card, { padding: 0, overflow: 'hidden' }]} onPress={() => navigation.navigate('Product', { id: p.id })}>
             <View>
-              <Image source={{ uri: img(p.images[0]?.url) }} style={{ width: '100%', height: 200, backgroundColor: '#ece8e0' }} />
+              <Image source={imgSrc(p.images[0]?.url)} style={{ width: '100%', height: 200, backgroundColor: '#ece8e0' }} />
               {pct ? <Text style={[s.badge, { position: 'absolute', top: 10, left: 10 }]}>{pct}% OFF</Text> : null}
             </View>
             <View style={{ padding: 14 }}>

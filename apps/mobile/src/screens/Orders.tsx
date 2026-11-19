@@ -3,6 +3,7 @@ import { ActivityIndicator, Alert, FlatList, Image, Text, View } from 'react-nat
 import { ORDER_STATUSES, money } from '@mm/shared';
 import { api, img } from '../api';
 import { C, Chip, StatusPill, s } from '../theme';
+import { imgSrc } from '../images';
 
 /** Buyer: their orders. Seller (seller=true): incoming orders with status buttons. Same list as the web OrderList. */
 export default function Orders({ seller }: { seller?: boolean }) {
@@ -33,7 +34,7 @@ export default function Orders({ seller }: { seller?: boolean }) {
           </Text>
           {o.items.map((i: any) => (
             <View key={i.id} style={{ flexDirection: 'row', gap: 12, marginTop: 12 }}>
-              {i.image_url ? <Image source={{ uri: img(i.image_url) }} style={{ width: 72, height: 56, borderRadius: 10, backgroundColor: '#ece8e0' }} /> : null}
+              {i.image_url ? <Image source={imgSrc(i.image_url)} style={{ width: 72, height: 56, borderRadius: 10, backgroundColor: '#ece8e0' }} /> : null}
               <View style={{ flex: 1 }}>
                 <Text style={s.title}>{i.title} × {i.qty}</Text>
                 {(i.options || []).map((x: any) => <Text key={x.group} style={s.muted}>{x.group}: {x.label}</Text>)}

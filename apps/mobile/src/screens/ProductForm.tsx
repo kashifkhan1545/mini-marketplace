@@ -4,6 +4,7 @@ import * as ImagePicker from 'expo-image-picker';
 import type { Category, OptionType } from '@mm/shared';
 import { api, img, uploadImage } from '../api';
 import { Btn, C, Chip, Field, s } from '../theme';
+import { imgSrc } from '../images';
 
 interface VForm { label: string; price_delta: string; color_hex: string; image_url: string }
 interface GForm { name: string; type: OptionType; required: boolean; values: VForm[] }
@@ -101,7 +102,7 @@ export default function ProductForm({ route, navigation }: any) {
         <View style={s.wrap}>
           {f.images.map((im, i) => (
             <View key={i}>
-              <Image source={{ uri: img(im.url) }} style={{ width: 84, height: 64, borderRadius: 10, backgroundColor: '#ece8e0' }} />
+              <Image source={imgSrc(im.url)} style={{ width: 84, height: 64, borderRadius: 10, backgroundColor: '#ece8e0' }} />
               <Pressable onPress={() => setF((st) => ({ ...st, images: st.images.filter((_, j) => j !== i) }))}
                 style={{ position: 'absolute', top: -8, right: -8, width: 28, height: 28, borderRadius: 14, backgroundColor: '#fff', borderWidth: 1, borderColor: C.line, alignItems: 'center', justifyContent: 'center' }}>
                 <Text>✕</Text>

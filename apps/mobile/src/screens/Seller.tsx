@@ -5,6 +5,7 @@ import { Product, money } from '@mm/shared';
 import { api, img } from '../api';
 import { useAuth } from '../auth';
 import { Btn, C, Chip, StatusPill, s } from '../theme';
+import { imgSrc } from '../images';
 import Orders from './Orders';
 
 export default function Seller({ navigation }: any) {
@@ -43,7 +44,7 @@ export default function Seller({ navigation }: any) {
           ListEmptyComponent={products ? <Text style={s.muted}>No products yet.</Text> : undefined}
           renderItem={({ item: p }) => (
             <View style={[s.card, { flexDirection: 'row', gap: 12 }]}>
-              {p.images[0] ? <Image source={{ uri: img(p.images[0].url) }} style={{ width: 92, height: 72, borderRadius: 12, backgroundColor: '#ece8e0' }} /> : null}
+              {p.images[0] ? <Image source={imgSrc(p.images[0].url)} style={{ width: 92, height: 72, borderRadius: 12, backgroundColor: '#ece8e0' }} /> : null}
               <View style={{ flex: 1 }}>
                 <Text style={s.title}>{p.title}</Text>
                 <View style={[s.row, { marginVertical: 4 }]}>

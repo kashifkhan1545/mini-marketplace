@@ -5,6 +5,7 @@ import { api, img } from '../api';
 import { useAuth } from '../auth';
 import { useCart } from '../cart';
 import { Btn, C, Field, s } from '../theme';
+import { imgSrc } from '../images';
 
 export default function Cart({ navigation }: any) {
   const { lines, setQty, clear, total } = useCart();
@@ -45,7 +46,7 @@ export default function Cart({ navigation }: any) {
     <ScrollView style={s.screen} contentContainerStyle={s.pad} keyboardShouldPersistTaps="handled">
       {lines.map((l) => (
         <View key={l.key} style={[s.card, { flexDirection: 'row', gap: 12 }]}>
-          <Image source={{ uri: img(l.image) }} style={{ width: 92, height: 72, borderRadius: 12, backgroundColor: '#ece8e0' }} />
+          <Image source={imgSrc(l.image)} style={{ width: 92, height: 72, borderRadius: 12, backgroundColor: '#ece8e0' }} />
           <View style={{ flex: 1 }}>
             <Text style={s.title}>{l.title}</Text>
             {l.options.map((o) => (

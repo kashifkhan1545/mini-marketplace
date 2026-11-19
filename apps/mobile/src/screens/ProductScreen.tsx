@@ -7,6 +7,7 @@ import {
 import { api, img } from '../api';
 import { useCart } from '../cart';
 import { Btn, C, Chip, s, shadow } from '../theme';
+import { imgSrc } from '../images';
 
 const W = Dimensions.get('window').width;
 const H = Dimensions.get('window').height;
@@ -61,7 +62,7 @@ export default function ProductScreen({ route, navigation }: any) {
             onMomentumScrollEnd={(e) => setIdx(Math.round(e.nativeEvent.contentOffset.x / (W - 30)))}
             renderItem={({ item }) => (
               <Pressable onPress={() => setZoom(true)}>
-                <Image source={{ uri: img(item.url) }} style={{ width: W - 30, height: (W - 30) * 0.75, backgroundColor: '#ece8e0' }} />
+                <Image source={imgSrc(item.url)} style={{ width: W - 30, height: (W - 30) * 0.75, backgroundColor: '#ece8e0' }} />
               </Pressable>
             )}
           />
@@ -69,7 +70,7 @@ export default function ProductScreen({ route, navigation }: any) {
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginTop: 10 }} contentContainerStyle={{ gap: 8 }}>
           {gallery.map((g, i) => (
             <Pressable key={g.id + g.url} onPress={() => goto(i)} style={{ borderWidth: 2, borderColor: i === idx ? C.brand2 : 'transparent', borderRadius: 12, overflow: 'hidden', opacity: i === idx ? 1 : 0.7 }}>
-              <Image source={{ uri: img(g.url) }} style={{ width: 68, height: 68 }} />
+              <Image source={imgSrc(g.url)} style={{ width: 68, height: 68 }} />
             </Pressable>
           ))}
         </ScrollView>
@@ -117,7 +118,7 @@ export default function ProductScreen({ route, navigation }: any) {
           <FlatList
             horizontal pagingEnabled data={gallery} keyExtractor={(g) => 'z' + g.id + g.url} initialScrollIndex={idx}
             getItemLayout={(_, i) => ({ length: W, offset: W * i, index: i })}
-            renderItem={({ item }) => <Image source={{ uri: img(item.url) }} style={{ width: W, height: H * 0.7 }} resizeMode="contain" />}
+            renderItem={({ item }) => <Image source={imgSrc(item.url)} style={{ width: W, height: H * 0.7 }} resizeMode="contain" />}
           />
           <Pressable onPress={() => setZoom(false)} style={{ position: 'absolute', top: 50, right: 16, width: 48, height: 48, borderRadius: 24, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center' }}>
             <Text style={{ fontSize: 22 }}>✕</Text>
