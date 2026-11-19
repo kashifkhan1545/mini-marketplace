@@ -1,0 +1,13 @@
+{
+  "name": "mini-marketplace",
+  "private": true,
+  "workspaces": ["apps/*", "packages/*"],
+  "scripts": {
+    "web": "npm run dev -w @mm/web",
+    "mobile": "npm run start -w @mm/mobile",
+    "seed": "node --env-file=apps/web/.env.local scripts/seed.mjs"
+  },
+  "devDependencies": {
+    "@supabase/supabase-js": "^2.45.0"
+  }
+}
