@@ -40,9 +40,17 @@ export default function Home() {
 
   return (
     <>
-      <h1>Browse</h1>
+      <section className="hero">
+        <span className="pill">MULTI-VENDOR MARKETPLACE</span>
+        <h1>Furniture you will love, from sellers you can trust.</h1>
+        <p>Pick your colour, size and storage — the price updates as you go.</p>
+        <a className="btn" href="#products">Shop divan beds</a>
+      </section>
+      <div className="searchbar" id="products">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
+        <input placeholder="Search products…" value={f.q} onChange={set('q')} />
+      </div>
       <div className="filters">
-        <input className="wide" placeholder="Search products…" value={f.q} onChange={set('q')} />
         <select value={f.category} onChange={set('category')}>
           <option value="">All categories</option>
           <option value="furniture">Furniture</option>
@@ -66,14 +74,18 @@ export default function Home() {
           const off = discountPercent(p.base_price, p.compare_at_price);
           return (
             <Link key={p.id} href={`/products/${p.id}`} className="pcard">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={p.images[0]?.url} alt={p.title} />
+              <div className="imgw">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={p.images[0]?.url} alt={p.title} loading="lazy" />
+                {off && <span className="off">{off}% OFF</span>}
+              </div>
               <div className="pbody">
                 <div className="t">{p.title}</div>
-                <div className="muted">from</div>
-                <b>{money(p.base_price)}</b>
-                {p.compare_at_price && <span className="was">{money(p.compare_at_price)}</span>}
-                {off && <span className="off">{off}% OFF</span>}
+                <div className="pr">
+                  <span className="muted">from</span>
+                  <b>{money(p.base_price)}</b>
+                  {p.compare_at_price && <span className="was">{money(p.compare_at_price)}</span>}
+                </div>
               </div>
             </Link>
           );

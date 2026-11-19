@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   appleWebApp: { capable: true, title: 'MiniMarket', statusBarStyle: 'default' },
   icons: { icon: '/icon.svg', apple: '/icon-192.png' },
 };
-export const viewport: Viewport = { width: 'device-width', initialScale: 1, themeColor: '#1f6f5c' };
+export const viewport: Viewport = { width: 'device-width', initialScale: 1, themeColor: '#17493f', viewportFit: 'cover' };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
