@@ -49,12 +49,13 @@ const colours = [
 ];
 const ph = (c, t) => `/api/placeholder?c=${c}&t=${encodeURIComponent(t)}`;
 
-await db.from('product_images').insert(
-  ['Front', 'Side', 'Headboard', 'Drawers', 'Detail'].map((t, i) => ({ product_id: product.id, url: ph('E8DCC4', t), position: i })),
-);
+// Real bed photos from Unsplash (free to use). Hot-linked, so they show on web and in the mobile app.
+const photo = (id) => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=1200&q=75`;
+const PHOTOS = ['1505693416388-ac5ce068fe85', '1631049307264-da0ec9d70304', '1616594039964-ae9021a400a0', '1595526114035-0d45ed16cfbf', '1540518614846-7eded433c457'].map(photo);
+await db.from('product_images').insert(PHOTOS.map((url, i) => ({ product_id: product.id, url, position: i })));
 
 const groups = [
-  { name: 'Colour', type: 'swatch', required: true, values: colours.map(([label, hex]) => ({ label, price_delta: 0, color_hex: '#' + hex, image_url: ph(hex, label) })) },
+  { name: 'Colour', type: 'swatch', required: true, values: colours.map(([label, hex]) => ({ label, price_delta: 0, color_hex: '#' + hex, image_url: label === 'Cream Naples' ? PHOTOS[0] : ph(hex, label) })) },
   { name: 'Size', type: 'select', required: true, values: [
     ['Small Single 2FT6', 90], ['Single 3FT', 95], ['Small Double 4FT', 100], ['Double 4FT6', 110], ['King 5FT', 125], ['Super King 6FT', 150],
   ].map(([label, price_delta]) => ({ label, price_delta })) },
