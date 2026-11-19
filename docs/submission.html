@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>MiniMarket – MVP Skills Test Submission</title>
+<style>
+@page { size: A4; margin: 18mm 16mm; }
+* { box-sizing: border-box; }
+body { font: 10.5pt/1.5 "Segoe UI", Arial, sans-serif; color: #17202a; margin: 0; }
+h1 { font-size: 22pt; margin: 0 0 4px; color: #17493f; letter-spacing: -.02em; }
+h2 { font-size: 14pt; margin: 22px 0 6px; color: #17493f; border-bottom: 2px solid #e6e2da; padding-bottom: 4px; break-after: avoid; }
+h3 { font-size: 11pt; margin: 14px 0 4px; break-after: avoid; }
+p { margin: 6px 0; } ul { margin: 4px 0 8px 18px; padding: 0; } li { margin: 3px 0; }
+.sub { color: #6a7480; margin-bottom: 14px; }
+table { width: 100%; border-collapse: collapse; margin: 8px 0; font-size: 9.8pt; }
+th, td { border: 1px solid #e0dbd0; padding: 6px 8px; text-align: left; vertical-align: top; }
+th { background: #f1eee7; }
+.ok { color: #17653a; font-weight: 700; } .no { color: #b3261e; font-weight: 700; } .part { color: #8a5a00; font-weight: 700; }
+.box { background: #f6f4f0; border: 1px solid #e6e2da; border-radius: 8px; padding: 10px 14px; margin: 10px 0; }
+code { background: #f1eee7; padding: 1px 5px; border-radius: 4px; font-size: 9.5pt; }
+a { color: #17493f; }
+tr, li { break-inside: avoid; }
+</style></head><body>
+
+<h1>MiniMarket</h1>
+<div class="sub">MVP Skills Test: Mini Marketplace (Web + App) · submission document · 19 November 2026</div>
+
+<div class="box">
+<b>Live web link:</b> <a href="https://mini-marketplace-eosin.vercel.app">https://mini-marketplace-eosin.vercel.app</a><br>
+<b>Source code:</b> <a href="https://github.com/kashifkhan1545/mini-marketplace">https://github.com/kashifkhan1545/mini-marketplace</a><br>
+<b>Test logins:</b> buyer@demo.test, seller@demo.test, admin@demo.test. I'm sending the password directly rather than printing it in a document.<br>
+<b>Android APK</b> and <b>3-minute video:</b> sent separately.
+</div>
+
+<h2>1. Deliverables</h2>
+<table>
+<tr><th style="width:34%">Deliverable</th><th style="width:16%">Status</th><th>Where / note</th></tr>
+<tr><td>Plan (what I understood, stack, tables, skips, time split)</td><td class="ok">In this document</td><td>Section 2. See the honest note in section 5 about when it was written.</td></tr>
+<tr><td>Live web link with buyer / seller / admin logins</td><td class="ok">Done</td><td>Link above. Password sent directly.</td></tr>
+<tr><td>Public GitHub repo with README</td><td class="ok">Done</td><td>Link above. README covers running it, the database, accounts and what's done or not.</td></tr>
+<tr><td>Mobile app (APK or PWA)</td><td class="ok">Both</td><td>Android APK sent separately. The website is also an installable PWA (own icon, full-screen).</td></tr>
+<tr><td>3-minute video</td><td class="ok">Sent separately</td><td>Seller adds the bed → buyer picks options and the price moves → checkout → seller changes status → same flow on the phone.</td></tr>
+<tr><td>AI notes</td><td class="ok">In this document</td><td>Section 4.</td></tr>
+<tr><td>Honest status + what I'd do with 2 more weeks</td><td class="ok">In this document</td><td>Section 5.</td></tr>
+</table>
+
+<h2>2. Plan</h2>
+
+<h3>What I understood</h3>
+<p>The company is building a multi-vendor marketplace, something in the spirit of Amazon or eBay, where many independent sellers list products and buyers shop across all of them. This test is a deliberately small slice of that: one product with a lot of configurable options (colour, size, storage, headboard, base, assembly), three kinds of user (buyer, seller, admin), and the same data showing up on a website and on a phone.</p>
+<p>The hard part isn't the screens. It's that the <b>options and their prices must live in the database</b>, entered by the seller, so any seller can describe any product the same way and the price is always calculated the same way. If the bed's options were typed into the buyer page, I'd have built a one-product shop, not a marketplace. So I treated that as the core and built everything else around it.</p>
+<p><i>Note: I worked from the test brief itself. If there's a job description or project background I should have read, I'd be glad to go through it and adjust this plan.</i></p>
+
+<h3>What I built first, and why</h3>
+<ol>
+<li><b>The pricing rule and data model</b>, before any UI. One small shared function, <code>base price + the price of every chosen option</code>, used by the browser for the live price and by the server at checkout. If these two ever disagreed, the whole product would be untrustworthy.</li>
+<li><b>The backend and database</b> (Supabase + Next.js API): roles, products with option groups, orders.</li>
+<li><b>The buyer flow</b>: browse, product page, cart, checkout. This is the one the reviewer will actually click through.</li>
+<li><b>Seller and admin screens</b>, then <b>mobile polish</b> and the <b>Android app</b>.</li>
+</ol>
+
+<h3>Stack</h3>
+<p>Next.js (website and API in one project), Supabase (Postgres, login, image storage), Vercel (hosting), React Native with Expo for the Android app. I chose one backend for both web and app, so there's one set of business rules to get right. I picked tools I could move fast in and deploy for free.</p>
+
+<h3>Database tables</h3>
+<ul>
+<li><code>profiles</code>: user, role (buyer / seller / admin), seller approval status</li>
+<li><code>categories</code>: Furniture › Divan Beds (only this one, as asked)</li>
+<li><code>products</code>, <code>product_images</code>: title, base and compare-at price (stored as numbers), status, gallery</li>
+<li><code>option_groups</code>, <code>option_values</code>: "Size", "Storage" and so on, each value with a label, a price change and (for colours) a swatch colour</li>
+<li><code>orders</code> (one per seller per checkout, with a status) and <code>order_items</code> (a snapshot of the title, image, price and chosen options at purchase time, so later edits never rewrite history)</li>
+</ul>
+
+<h3>What I chose to skip</h3>
+<p>Real payments (checkout is a pretend one), emails, delivery tracking, analytics, reviews, stock levels, and more than one category. The brief said to decide and say so. I'd rather have one flow that really works than many half-finished ones.</p>
+
+<h3>How I split the time</h3>
+<p>Roughly: first a short stretch on the data model and pricing rule; the biggest block on backend plus the buyer flow; then seller, admin and orders; then mobile-responsive polish; then the Android app and deployment; and the last stretch on testing, the README and this document. I worked in that order rather than strictly by the clock.</p>
+
+<h2>3. How the required rules are met</h2>
+<table>
+<tr><th style="width:42%">Rule from the brief</th><th>How</th></tr>
+<tr><td>Price updates immediately when any option changes</td><td>Computed in the browser from the option data on every click.</td></tr>
+<tr><td>Cart line shows every chosen option</td><td>Colour, size, storage, headboard, base and assembly are all listed on the cart line and on the order.</td></tr>
+<tr><td>Two combinations of the same bed = two cart lines</td><td>The cart line is keyed by product + chosen options. Same options add to quantity, different options make a new line.</td></tr>
+<tr><td>Seller enters options and prices; not hard-coded</td><td>The seller form edits option groups and values. The buyer page only renders what the database returns.</td></tr>
+<tr><td>Prices are numbers in the database</td><td>Postgres <code>numeric</code> columns.</td></tr>
+<tr><td>Passwords and keys not in the public repo</td><td>All secrets are in git-ignored env files and Vercel settings. I also scrubbed the demo password out of the source and git history.</td></tr>
+</table>
+
+<h2>4. AI notes</h2>
+<p><b>Tool used:</b> Claude Code (a Claude model) did most of the hands-on work with me directing it. It wrote the SQL migration, the API routes, the pages, the shared pricing code and the Android app, and it ran the Supabase, Vercel and Android build tooling. I made the product decisions (stack, what to skip, the pricing rule) and reviewed and tested what it produced.</p>
+<p><b>One thing the AI got wrong that I had to fix:</b> the first mobile product page <i>looked</i> fine in code and passed a check for horizontal scrolling, but on a real 360px-wide screenshot the photo gallery, title and swatches were running off the right edge. The automated "no sideways scroll" check had been fooled because the page hides overflow. The cause was a CSS grid whose children weren't allowed to shrink (<code>min-width: 0</code> was missing). I only caught it by looking at an actual phone-sized screenshot, not by trusting the check. After the fix, I re-checked it the same way.</p>
+<p><b>AI feature in the product:</b> a seller can upload a product photo and get a suggested title and description (a Claude vision model). See the status note below, since it needs an API key to run.</p>
+
+<h2>5. Honest status</h2>
+
+<h3>Working, and tested</h3>
+<p>I ran a scripted end-to-end test <b>against the live site</b> using all three accounts:</p>
+<ul>
+<li>Logins for buyer, seller and admin work.</li>
+<li><b>Five different option combinations</b> were priced and ordered. All five prices matched my hand calculation exactly: £359.99, £679.98, £429.99, £639.98 and £419.99.</li>
+<li>The order stored every chosen option per line (including assembly). The buyer saw the order and the seller saw it too.</li>
+<li>The seller moved the order New → Confirmed → Shipped → Delivered, and the buyer saw the new status.</li>
+<li>Permissions hold: a buyer trying a seller or admin action gets "forbidden" (403); the admin can reach the admin data.</li>
+<li>The website was checked at 360px width (no sideways scroll on home, product, cart, login) and has a sticky Add-to-Basket bar, 44px+ tap targets, a swipe gallery with thumbnails and click-to-enlarge, search and filters (price, colour, size, category).</li>
+</ul>
+
+<h3>Built, but not fully proven</h3>
+<ul>
+<li><b>AI photo-to-description feature: not live.</b> The code is there, but no API key is configured on the live site, so it currently answers "AI is not configured". I haven't seen it produce a real result.</li>
+<li><b>Android app:</b> built and compiled with the live site as its backend, and the screens are written (list and search, product page with options and live price, cart, checkout, orders, login). I tested the app's backend calls through the live API test above, but I have <b>not</b> clicked through the app on a physical phone for a long session. Treat it as a working first version.</li>
+<li><b>PWA install on a phone:</b> the manifest and icons are in place. I haven't personally done "Add to Home Screen" on an iPhone.</li>
+<li><b>Seller product form and admin screens through the browser:</b> the pages exist and the underlying API calls were tested. I did not script a full click-through of every form field in a browser. The bed itself was loaded by a seed script; the video is where the seller form is shown in use.</li>
+</ul>
+
+<h3>Not done</h3>
+<ul>
+<li>Real payments, emails, delivery tracking and analytics (skipped on purpose, as allowed).</li>
+<li>The optional push notification for order-status changes. The mobile order list refreshes itself every 15 seconds instead.</li>
+<li>Automated tests. All my testing was scripted checks and manual looking, not a test suite in the repo.</li>
+<li>Admin and seller screens in the mobile app. Only the buyer flow is in the app, which is what the brief required.</li>
+</ul>
+
+<h3>Things I want to be upfront about</h3>
+<ul>
+<li><b>Default price vs the brief.</b> The brief gives £269.99 as the base for a "small single", but also lists Small Single 2FT6 as +£90. I followed the table literally, so the page opens at £359.99 with the smallest size selected. If £269.99 should be the starting price, it's a one-line data change.</li>
+<li><b>The plan was written alongside the build, not sent beforehand.</b> The brief asks for the plan before coding. I didn't send it first, and I'd rather say so than pretend.</li>
+<li>Row-level security is on for every table with no public policies, and all access goes through the API with server-side role checks. It's safe by default, but I haven't done a formal security review.</li>
+</ul>
+
+<h3>What I'd do with two more weeks</h3>
+<ol>
+<li>An automated test suite for the pricing rule and the order flow, run on every push.</li>
+<li>Real payments (Stripe), order emails and push notifications for status changes.</li>
+<li>Stock levels per option combination, and a price-rule editor (e.g. bundle discounts) for sellers.</li>
+<li>Proper image handling (resizing, a CDN), a fuller seller dashboard, and many categories with category-specific option templates.</li>
+<li>A real security pass (rate limiting, input validation review, audit log for admin actions) and accessibility testing.</li>
+</ol>
+
+</body></html>
