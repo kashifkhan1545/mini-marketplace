@@ -28,3 +28,19 @@ export async function api<T = any>(path: string, json?: unknown, method?: string
 
 /** Image URLs from the API may be relative (placeholders). */
 export const img = (u?: string | null) => (u ? (u.startsWith('http') ? u : API_URL + u) : undefined);
+
+/** Multipart upload of a picked image to /api/upload (sellers). Returns the public URL. */
+export async function uploadImage(uri: string, mime = 'image/jpeg'): Promise<string> {
+  const { data } = await supabase.auth.getSession();
+  const fd = new FormData();
+  const ext = mime.split('/')[1] || 'jpg';
+  fd.append('file', { uri, name: `photo.${ext}`, type: mime } as any);
+  const res = await fetch(API_URL + '/api/upload', {
+    method: 'POST',
+    headers: data.session ? { Authorization: `Bearer ${data.session.access_token}` } : {},
+    body: fd,
+  });
+  const out = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(out.error || `Upload failed (${res.status})`);
+  return out.url as string;
+}

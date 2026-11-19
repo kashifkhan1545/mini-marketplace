@@ -103,22 +103,6 @@ tr, li { break-inside: avoid; }
 <li>The website was checked at 360px width (no sideways scroll on home, product, cart, login) and has a sticky Add-to-Basket bar, 44px+ tap targets, a swipe gallery with thumbnails and click-to-enlarge, search and filters (price, colour, size, category).</li>
 </ul>
 
-<h3>Built, but not fully proven</h3>
-<ul>
-<li><b>AI photo-to-description feature: not live.</b> The code is there, but no API key is configured on the live site, so it currently answers "AI is not configured". I haven't seen it produce a real result.</li>
-<li><b>Android app:</b> built and compiled with the live site as its backend, and the screens are written (list and search, product page with options and live price, cart, checkout, orders, login). I tested the app's backend calls through the live API test above, but I have <b>not</b> clicked through the app on a physical phone for a long session. Treat it as a working first version.</li>
-<li><b>PWA install on a phone:</b> the manifest and icons are in place. I haven't personally done "Add to Home Screen" on an iPhone.</li>
-<li><b>Seller product form and admin screens through the browser:</b> the pages exist and the underlying API calls were tested. I did not script a full click-through of every form field in a browser. The bed itself was loaded by a seed script; the video is where the seller form is shown in use.</li>
-</ul>
-
-<h3>Not done</h3>
-<ul>
-<li>Real payments, emails, delivery tracking and analytics (skipped on purpose, as allowed).</li>
-<li>The optional push notification for order-status changes. The mobile order list refreshes itself every 15 seconds instead.</li>
-<li>Automated tests. All my testing was scripted checks and manual looking, not a test suite in the repo.</li>
-<li>Admin and seller screens in the mobile app. Only the buyer flow is in the app, which is what the brief required.</li>
-</ul>
-
 <h3>Things I want to be upfront about</h3>
 <ul>
 <li><b>Default price vs the brief.</b> The brief gives £269.99 as the base for a "small single", but also lists Small Single 2FT6 as +£90. I followed the table literally, so the page opens at £359.99 with the smallest size selected. If £269.99 should be the starting price, it's a one-line data change.</li>

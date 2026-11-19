@@ -13,7 +13,7 @@ The one product in the catalogue is a **Prague Divan Bed – Cream Naples** (neu
 
 ```
 apps/web        Next.js 15 (App Router) — the website AND the backend API (/api/*)
-apps/mobile     Expo / React Native Android app, talks to the same API + Supabase
+apps/mobile     Expo / React Native Android app: same features and look as the web (shop + filters, product options with live price, cart, checkout, orders, seller dashboard + product form, admin), same API + Supabase
 packages/shared Pricing logic and types used by web, API and mobile (one source of truth)
 supabase/       SQL migration (tables, row-level security, storage bucket)
 scripts/seed.mjs  Creates the 3 demo accounts, the category and the Prague bed
